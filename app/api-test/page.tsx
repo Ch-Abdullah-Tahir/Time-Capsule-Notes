@@ -17,7 +17,7 @@ export default function ApiTest() {
     const res = await fetch("/api/capsules", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: message, unlockDate }),
+      body: JSON.stringify({  message, unlockDate }),
     });
     const data = await res.json();
     setLog(JSON.stringify(data, null, 2));
