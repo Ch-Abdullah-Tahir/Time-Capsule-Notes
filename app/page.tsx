@@ -36,7 +36,6 @@ export default function Home() {
           "radial-gradient(ellipse at 50% -10%, #171a24 0%, #0a0b10 55%, #05060a 100%)",
       }}
     >
-      {/* Starfield */}
       <div
         className="absolute inset-0 opacity-70 pointer-events-none"
         style={{
@@ -67,7 +66,6 @@ export default function Home() {
       </nav>
 
       <main className="relative max-w-3xl mx-auto px-6 py-14 flex flex-col items-center gap-10">
-        {/* Hero with constellation */}
         <div className="relative text-center">
           <svg
             className="absolute -top-6 left-1/2 -translate-x-1/2 w-64 h-24 opacity-40"
