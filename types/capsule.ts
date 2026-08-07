@@ -1,5 +1,7 @@
 export type Capsule = {
-  id: number;
+  id: string;
+  user_id: string;
   message: string;
-  unlockDate: string;
+  unlock_date: string;
+  created_at: string;
 };
