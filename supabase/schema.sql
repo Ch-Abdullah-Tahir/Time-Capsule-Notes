@@ -21,3 +21,5 @@ on capsules for delete
 using (auth.uid() = user_id);
 
 grant select, insert, delete on public.capsules to anon, authenticated;
+alter table capsules add column notified boolean default false;
+grant select, insert, update, delete on public.capsules to service_role;
