@@ -1,0 +1,100 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "9b43bb5b-550d-4a10-89d2-0474913be985",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "74a20842-d735-4896-a68e-56d29770df44",
+      "name": "Webhook",
+      "webhookId": "9b43bb5b-550d-4a10-89d2-0474913be985"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "33ed9fac-1950-4667-b38b-63601da047d3",
+              "name": "slackText",
+              "value": "=={{ \"🔒 New capsule sealed! Opens on \" + $json.body.unlock_date }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "d351ebf9-a06c-435c-a48e-02400024188d",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"text\": \"={{ $json.slackText }}\"}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        448,
+        0
+      ],
+      "id": "ee6cc3d0-c7bb-4c91-b59a-8a0246cdad88",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "ff35835e-cd5c-4c4d-91ef-eca072c54491",
+  "meta": {
+    "instanceId": "fa80429c98229665639b326b87cb42776c239569063ffb4727d7aeb6f736e612"
+  },
+  "nodeGroups": [],
+  "id": "TFqOLVbXtRxxt5Sx",
+  "tags": []
+}

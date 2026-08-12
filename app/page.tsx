@@ -36,17 +36,31 @@ export default function Home() {
     document.title = `Time Capsules (${capsules.length})`;
   }, [capsules]);
 
-  async function handleAdd(message: string, unlockDate: string) {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-    const { data, error } = await supabase
-      .from("capsules")
-      .insert({ message, unlock_date: unlockDate, user_id: user.id })
-      .select()
-      .single();
-    if (error) { console.error(error); return; }
-    setCapsules([data, ...capsules]);
+ async function handleAdd(message: string, unlockDate: string) {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return;
+
+  const { data, error } = await supabase
+    .from("capsules")
+    .insert({ message, unlock_date: unlockDate, user_id: user.id })
+    .select()
+    .single();
+
+  if (error) {
+    console.error(error);
+    return;
   }
+  setCapsules([data, ...capsules]);
+
+  // Fire the n8n webhook — don't block the UI or crash if it fails
+ fetch("https://f240020.app.n8n.cloud/webhook/9b43bb5b-550d-4a10-89d2-0474913be985"
+,
+  {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ message, unlock_date: unlockDate }),
+}).catch((err) => console.error("n8n notify failed:", err));
+ }
 
   async function handleDelete(id: string) {
     const { error } = await supabase.from("capsules").delete().eq("id", id);
@@ -172,7 +186,8 @@ export default function Home() {
   );
 }
 
-function EmptySlot({ open = false }: { open?: boolean }) {
+function EmptySlot({ open = false }: { open?: boolean }) 
+{
   return (
     <div className="aspect-square rounded-lg border border-dashed border-[#3A2E1A] flex items-center justify-center text-[#5C4A2A]">
       {open ? <UnlockIcon className="w-4 h-4 opacity-40" /> : <LockIcon className="w-4 h-4 opacity-40" />}
@@ -180,7 +195,8 @@ function EmptySlot({ open = false }: { open?: boolean }) {
   );
 }
 
-function LockIcon({ className = "w-4 h-4" }: { className?: string }) {
+function LockIcon({ className = "w-4 h-4" }: { className?: string }) 
+{
   return (
     <svg viewBox="0 0 24 24" fill="none" className={className}>
       <rect x="5" y="11" width="14" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
@@ -189,7 +205,8 @@ function LockIcon({ className = "w-4 h-4" }: { className?: string }) {
   );
 }
 
-function UnlockIcon({ className = "w-4 h-4" }: { className?: string }) {
+function UnlockIcon({ className = "w-4 h-4" }: { className?: string }) 
+{
   return (
     <svg viewBox="0 0 24 24" fill="none" className={className}>
       <rect x="5" y="11" width="14" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
