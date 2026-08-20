@@ -1,5 +1,5 @@
 "use client";
-
+import CapsuleAssistant from "@/components/CapsuleAssistant";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Capsule } from "@/types/capsule";
@@ -182,6 +182,7 @@ export default function Home() {
           </div>
         </div>
       </main>
+      <CapsuleAssistant />
     </div>
   );
 }
