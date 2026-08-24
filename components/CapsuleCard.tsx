@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Capsule } from "@/types/capsule";
+import { isUnlocked as checkUnlocked, todayInPacificTime } from "@/lib/timezone";
 
 type Props = {
   capsule: Capsule;
@@ -10,11 +11,15 @@ type Props = {
 
 export default function CapsuleCard({ capsule, onDelete }: Props) {
   const [hovered, setHovered] = useState(false);
-  const isUnlocked = new Date(capsule.unlock_date) <= new Date();
+  const isUnlocked = checkUnlocked(capsule.unlock_date);
 
   const daysLeft = Math.max(
     0,
-    Math.ceil((new Date(capsule.unlock_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+    Math.round(
+      (new Date(capsule.unlock_date + "T00:00:00").getTime() -
+        new Date(todayInPacificTime() + "T00:00:00").getTime()) /
+        (1000 * 60 * 60 * 24)
+    )
   );
 
   return (
