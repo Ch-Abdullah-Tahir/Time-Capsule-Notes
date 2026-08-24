@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { supabase } from "@/lib/supabase-client";
+import ChatbotLogo from "@/components/icons/ChatbotLogo";
 
 type Message = { role: "user" | "assistant"; text: string };
 
@@ -44,15 +45,16 @@ export default function CapsuleAssistant() {
     <>
       <button
         onClick={() => setOpen(!open)}
-        className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-[#C9A45C] text-[#0B0D12] flex items-center justify-center text-xl shadow-lg z-50"
+        className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-[#1c150c] border border-[#4A3A22] text-[#F2E7C9] flex items-center justify-center text-xl shadow-lg z-50"
         aria-label="Open capsule assistant"
       >
-        {open ? "×" : "💬"}
+        {open ? "×" : <ChatbotLogo size={30} />}
       </button>
 
       {open && (
         <div className="fixed bottom-24 right-6 w-80 max-h-[70vh] flex flex-col rounded-xl border border-[#4A3A22] bg-[#120d07] shadow-2xl z-50">
-          <div className="p-3 border-b border-[#3A2E1A]">
+          <div className="p-3 border-b border-[#3A2E1A] flex items-center gap-2">
+            <ChatbotLogo size={20} />
             <p className="font-serif text-sm text-[#F2E7C9]">Vault assistant</p>
           </div>
           <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-2">

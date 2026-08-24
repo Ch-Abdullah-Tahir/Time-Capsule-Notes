@@ -42,7 +42,7 @@ export async function POST(request: Request) {
       Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
     },
     body: JSON.stringify({
-      model: "llama-3.3-70b-versatile",
+      model: "openai/gpt-oss-120b",
       messages,
       tools,
     }),
@@ -84,7 +84,7 @@ export async function POST(request: Request) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
       },
-      body: JSON.stringify({ model: "llama-3.3-70b-versatile", messages }),
+      body: JSON.stringify({ model: "openai/gpt-oss-120b", messages }),
     });
 
     const secondData = await second.json();

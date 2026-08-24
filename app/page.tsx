@@ -6,6 +6,7 @@ import { Capsule } from "@/types/capsule";
 import { supabase } from "@/lib/supabase-client";
 import NewCapsuleForm from "@/components/NewCapsuleForm";
 import CapsuleCard from "@/components/CapsuleCard";
+import { isUnlocked } from "@/lib/timezone";
 
 const MIN_CELLS = 8;
 
@@ -51,15 +52,9 @@ export default function Home() {
     return;
   }
   setCapsules([data, ...capsules]);
-
-  // Fire the n8n webhook — don't block the UI or crash if it fails
- fetch("https://f240020.app.n8n.cloud/webhook/9b43bb5b-550d-4a10-89d2-0474913be985"
-,
-  {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ message, unlock_date: unlockDate }),
-}).catch((err) => console.error("n8n notify failed:", err));
+  // Sealed-capsule notification is now handled by a Supabase Database
+  // Webhook (capsules insert -> notify-sealed Edge Function), so nothing
+  // needs to fire from the client here anymore.
  }
 
   async function handleDelete(id: string) {
@@ -73,7 +68,7 @@ export default function Home() {
     router.push("/login");
   }
 
-  const unlockedCount = capsules.filter((c) => new Date(c.unlock_date) <= new Date()).length;
+  const unlockedCount = capsules.filter((c) => isUnlocked(c.unlock_date)).length;
   const placeholderCount = Math.max(0, MIN_CELLS - capsules.length);
 
   if (loading) {
@@ -114,6 +109,9 @@ export default function Home() {
                 {String(unlockedCount).padStart(2, "0")} OPEN
               </span>
             </div>
+            <button onClick={() => router.push("/profile")} className="text-xs text-[#9C9FA8] hover:text-[#EDE3CC] transition">
+              Profile
+            </button>
             <button onClick={handleLogout} className="text-xs text-[#9C9FA8] hover:text-[#EDE3CC] transition">
               Log out
             </button>
