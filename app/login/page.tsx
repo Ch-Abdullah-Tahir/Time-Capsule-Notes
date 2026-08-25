@@ -51,6 +51,15 @@ export default function LoginPage() {
     router.push("/");
   }
 
+  async function handleGoogleSignIn() {
+    setError("");
+    // No redirectTo passed — this falls back to the Site URL configured
+    // in Supabase's Auth settings, which is already correct for both
+    // local dev and production, so there's nothing to keep in sync here.
+    const { error } = await supabase.auth.signInWithOAuth({ provider: "google" });
+    if (error) setError(error.message);
+  }
+
   return (
     <div
       className="min-h-screen relative overflow-hidden flex items-center justify-center text-[#EDE3CC]"
@@ -120,6 +129,25 @@ export default function LoginPage() {
 
           {error && <p className="text-sm text-red-700 text-center">{error}</p>}
 
+          {mode !== "forgot" && (
+            <>
+              <button
+                type="button"
+                onClick={handleGoogleSignIn}
+                className="flex items-center justify-center gap-2 bg-white border border-[#C9A45C]/40 text-[#3C3C3C] text-sm font-medium py-2.5 rounded-lg hover:bg-[#FBF4E2] transition"
+              >
+                <GoogleIcon className="w-4 h-4" />
+                Continue with Google
+              </button>
+
+              <div className="flex items-center gap-3 text-[10px] text-[#8B6F3E] tracking-wider">
+                <div className="flex-1 h-px bg-[#C9A45C]/30" />
+                OR
+                <div className="flex-1 h-px bg-[#C9A45C]/30" />
+              </div>
+            </>
+          )}
+
           <input
             type="email"
             value={email}
@@ -179,5 +207,16 @@ export default function LoginPage() {
         )}
       </div>
     </div>
+  );
+}
+
+function GoogleIcon({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className}>
+      <path fill="#4285F4" d="M23.52 12.27c0-.85-.08-1.67-.22-2.45H12v4.64h6.47c-.28 1.5-1.13 2.77-2.4 3.63v3.02h3.89c2.27-2.09 3.57-5.17 3.57-8.84Z" />
+      <path fill="#34A853" d="M12 24c3.24 0 5.96-1.07 7.95-2.9l-3.89-3.02c-1.08.73-2.46 1.15-4.06 1.15-3.12 0-5.77-2.11-6.71-4.94H1.28v3.11C3.26 21.3 7.31 24 12 24Z" />
+      <path fill="#FBBC05" d="M5.29 14.29a7.2 7.2 0 0 1 0-4.58V6.6H1.28a12 12 0 0 0 0 10.8l4.01-3.11Z" />
+      <path fill="#EA4335" d="M12 4.75c1.76 0 3.34.61 4.58 1.79l3.44-3.44C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.28 6.6l4.01 3.11C6.23 6.86 8.88 4.75 12 4.75Z" />
+    </svg>
   );
 }
